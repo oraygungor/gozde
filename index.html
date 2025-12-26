@@ -3,225 +3,244 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>15 Ocak 2025 - Bekleyiş</title>
+    <title>15 Ocak 2026 | Bekleyiş</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@1,400;1,700&display=swap');
 
-        body {
+        :root {
+            --primary: #ff0033;
+            --dark: #050000;
+            --accent: #8b0000;
+            --text: #ffffff;
+        }
+
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            cursor: none; 
+        }
+
+        body {
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #050000;
-            background-image: radial-gradient(circle at center, #2a0000 0%, #000000 70%);
-            color: #ffcccc;
+            background-color: var(--dark);
+            background-image: 
+                radial-gradient(circle at 20% 30%, #1a0000 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, #1a0000 0%, transparent 40%);
+            color: var(--text);
             font-family: 'Playfair Display', serif;
             overflow: hidden;
-            text-align: center;
+            position: relative;
         }
 
-        /* Arka planda uçuşan parçacıklar */
-        .particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+        /* Arka Plan Nabız Efekti */
+        .pulse-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle, rgba(255, 0, 51, 0.05) 0%, rgba(0, 0, 0, 0) 70%);
+            animation: heartbeat 2s infinite ease-in-out;
             pointer-events: none;
-            z-index: 0;
-            opacity: 0.4;
+            z-index: 1;
         }
 
         .container {
             position: relative;
-            z-index: 2;
-            padding: 2rem;
-            border: 1px solid rgba(255, 0, 0, 0.1);
-            box-shadow: 0 0 50px rgba(139, 0, 0, 0.2);
-            background: rgba(10, 0, 0, 0.6);
-            backdrop-filter: blur(5px);
-            border-radius: 10px;
-            max-width: 600px;
+            z-index: 10;
+            padding: 3rem;
+            background: rgba(10, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 0, 51, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 0 100px rgba(0, 0, 0, 1), 0 0 40px rgba(139, 0, 0, 0.3);
+            max-width: 800px;
             width: 90%;
+            text-align: center;
         }
 
         h1 {
             font-family: 'Cinzel', serif;
-            font-size: 2.5rem;
+            font-size: clamp(1.5rem, 5vw, 3rem);
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 8px;
             margin-bottom: 10px;
-            color: #ff0033;
-            text-shadow: 0 0 10px rgba(255, 0, 51, 0.6);
-            letter-spacing: 3px;
-            animation: glow 3s infinite alternate;
+            text-shadow: 0 0 15px rgba(255, 0, 51, 0.8);
         }
 
-        .subtitle {
-            font-size: 1.2rem;
-            color: #b3b3b3;
-            margin-bottom: 30px;
+        .tagline {
             font-style: italic;
-        }
-
-        /* Sayaç Kutuları */
-        .countdown {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
+            color: #888;
             margin-bottom: 40px;
+            font-size: 1.1rem;
         }
 
-        .time-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        /* Geri Sayım */
+        .countdown {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
         }
 
-        .number {
-            font-size: 3rem;
+        .box {
+            background: rgba(40, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 0, 51, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .box:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .num {
+            display: block;
+            font-size: clamp(1.5rem, 4vw, 3.5rem);
             font-weight: 700;
             color: #fff;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
         }
 
         .label {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 2px;
-            color: #888;
-            margin-top: 5px;
+            color: var(--primary);
         }
 
-        /* Flörtöz Mesaj Alanı */
-        .flirty-text {
-            height: 50px;
-            font-size: 1.3rem;
-            color: #ff4d4d;
-            font-weight: bold;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-            animation: pulseText 2s infinite;
-        }
-
-        /* Kalp Atışı Efekti */
-        .heartbeat-overlay {
+        /* Mouse Efektleri */
+        .particle {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle, rgba(255,0,0,0.05) 0%, rgba(0,0,0,0) 70%);
-            animation: beat 1.5s infinite;
-            z-index: 1;
             pointer-events: none;
+            z-index: 9999;
+            font-size: 24px;
+            animation: floatUp 1.5s forwards ease-out;
+            user-select: none;
         }
 
-        /* Animasyonlar */
-        @keyframes glow {
-            from { text-shadow: 0 0 10px rgba(139, 0, 0, 0.5); }
-            to { text-shadow: 0 0 20px rgba(255, 0, 51, 0.9), 0 0 10px #fff; }
+        @keyframes heartbeat {
+            0% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.05); }
+            100% { opacity: 0.3; transform: scale(1); }
         }
 
-        @keyframes beat {
-            0% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.02); opacity: 0.8; }
-            100% { transform: scale(1); opacity: 0.5; }
+        @keyframes floatUp {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -150%) scale(1.8); opacity: 0; }
         }
 
-        @keyframes pulseText {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); color: #ff0033; }
-            100% { transform: scale(1); }
+        /* Özel İmleç */
+        #cursor-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--primary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            box-shadow: 0 0 15px var(--primary), 0 0 30px var(--primary);
+            transition: transform 0.1s ease;
         }
 
-        /* Mobil Uyum */
-        @media (max-width: 600px) {
-            h1 { font-size: 1.8rem; }
-            .number { font-size: 2rem; }
-            .countdown { gap: 10px; }
+        @media (max-width: 500px) {
+            .countdown { grid-template-columns: repeat(2, 1fr); }
+            .container { padding: 2rem 1.5rem; }
         }
     </style>
 </head>
 <body>
 
-    <div class="heartbeat-overlay"></div>
-    
+    <div id="cursor-dot"></div>
+    <div class="pulse-bg"></div>
+
     <div class="container">
-        <h1>Büyük Buluşma</h1>
-        <p class="subtitle">Teninin sıcaklığını hissetmeye kalan süre...</p>
-        
+        <h1>15 Ocak 2026</h1>
+        <p class="tagline">Arzuların gerçeğe dönüşeceği o geceye...</p>
+
         <div class="countdown">
-            <div class="time-box">
-                <span class="number" id="days">00</span>
+            <div class="box">
+                <span class="num" id="d">00</span>
                 <span class="label">Gün</span>
             </div>
-            <div class="time-box">
-                <span class="number" id="hours">00</span>
+            <div class="box">
+                <span class="num" id="h">00</span>
                 <span class="label">Saat</span>
             </div>
-            <div class="time-box">
-                <span class="number" id="minutes">00</span>
+            <div class="box">
+                <span class="num" id="m">00</span>
                 <span class="label">Dakika</span>
             </div>
-            <div class="time-box">
-                <span class="number" id="seconds">00</span>
+            <div class="box">
+                <span class="num" id="s">00</span>
                 <span class="label">Saniye</span>
             </div>
         </div>
-
-        <div class="flirty-text" id="flirtyMessage"></div>
     </div>
 
     <script>
-        // Hedef Tarih: 15 Ocak 2025, Saat 20:00 (Akşam yemeği saati varsayıldı)
-        const targetDate = new Date("Jan 15, 2025 20:00:00").getTime();
+        // Hedef Tarih
+        const target = new Date("Jan 15, 2026 21:00:00").getTime();
 
-        // Kışkırtıcı Mesajlar Listesi
-        const messages = [
-            "Gözlerini hayal ediyorum...",
-            "Sadece sen ve ben...",
-            "Nefesin nefesime karışacak...",
-            "Sabırsızlanıyorum...",
-            "O gece çok uzun olacak...",
-            "Bana dokunmana az kaldı..."
-        ];
-
-        // Sayaç Fonksiyonu
-        const timer = setInterval(function() {
+        // Sayaç Güncelleme
+        function updateTimer() {
             const now = new Date().getTime();
-            const distance = targetDate - now;
+            const diff = target - now;
 
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById("days").innerText = days < 10 ? "0" + days : days;
-            document.getElementById("hours").innerText = hours < 10 ? "0" + hours : hours;
-            document.getElementById("minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
-            document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
-
-            if (distance < 0) {
-                clearInterval(timer);
-                document.querySelector(".container").innerHTML = "<h1>Zamanı Geldi...</h1>";
+            if (diff <= 0) {
+                document.querySelector(".container").innerHTML = "<h1>ZAMAN GELDİ... 😈</h1>";
+                return;
             }
-        }, 1000);
 
-        // Mesaj Döngüsü
-        let msgIndex = 0;
-        const msgElement = document.getElementById("flirtyMessage");
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const secs = Math.floor((diff % (1000 * 60)) / 1000);
 
-        function changeMessage() {
-            msgElement.style.opacity = 0;
-            setTimeout(() => {
-                msgElement.innerText = messages[msgIndex];
-                msgElement.style.opacity = 1;
-                msgIndex = (msgIndex + 1) % messages.length;
-            }, 1000);
+            document.getElementById('d').innerText = days.toString().padStart(2, '0');
+            document.getElementById('h').innerText = hours.toString().padStart(2, '0');
+            document.getElementById('m').innerText = mins.toString().padStart(2, '0');
+            document.getElementById('s').innerText = secs.toString().padStart(2, '0');
         }
 
-        // İlk mesajı göster ve döngüyü başlat
-        changeMessage();
-        setInterval(changeMessage, 5000);
+        setInterval(updateTimer, 1000);
+        updateTimer();
 
+        // Mouse ve Parçacık Kontrolü
+        const cursorDot = document.getElementById('cursor-dot');
+        const particleTypes = ['❤️', '😈', '🔥', '💋', '😈', '🥀'];
+
+        document.addEventListener('mousemove', (e) => {
+            cursorDot.style.left = e.clientX + 'px';
+            cursorDot.style.top = e.clientY + 'px';
+
+            if (Math.random() > 0.85) {
+                createParticle(e.clientX, e.clientY);
+            }
+        });
+
+        function createParticle(x, y) {
+            const p = document.createElement('span');
+            p.className = 'particle';
+            const type = particleTypes[Math.floor(Math.random() * particleTypes.length)];
+            p.innerText = type;
+            p.style.left = x + 'px';
+            p.style.top = y + 'px';
+            
+            document.body.appendChild(p);
+
+            setTimeout(() => {
+                p.remove();
+            }, 1500);
+        }
+
+        // Dokunmatik desteği
+        document.addEventListener('touchstart', (e) => {
+            createParticle(e.touches[0].clientX, e.touches[0].clientY);
+        });
     </script>
 </body>
 </html>
